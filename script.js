@@ -8,6 +8,7 @@ var cont = document.getElementById('container');
 var sBox = document.getElementById('SettingsBox');
 var posDisp = document.getElementById('mPos');
 var mpFlag = 0;
+var prevTBase = 0;
 
 
 
@@ -61,9 +62,14 @@ var stage = new Kinetic.Stage({
 var animLayer = new Kinetic.Layer();
 var statLayer = new Kinetic.Layer();
 
-// add the layer to the stage
-stage.add(animLayer).add(statLayer);
-
+var frameRateGraph = new Kinetic.Line(
+    {
+	points: [0,0],
+	stroke: "red",
+	tension: 0,
+	strokeWidth: 2
+    }
+);
 
 //Loop to make Y gridlines
 for(i=0; i<rows; i++)
@@ -141,19 +147,45 @@ for(i=0; i<rows; i++)
 
 animLayer.add(cells[0][0]);
 animLayer.add(cells[0][1]);
+animLayer.add(frameRateGraph);
 cells[0][0].remove();
 animLayer.draw();
 statLayer.draw();
+
+// add the layer to the stage
+stage.add(animLayer).add(statLayer);
 
 var anim = new Kinetic.Animation(function(frame){
     var time = frame.time,
         timeDIff = frame.timeDiff,
         frameRate = frame.frameRate;
-    
+    var graphPoints = frameRateGraph.getPoints();
+    var xTime = Math.floor(time*0.3);
     //update stuff
-    mPos.innerHTML = "framerate: " + frameRate;
 
-    cells[0][1].setX(50*Math.sin(frame.time * 2  * Math.PI/2000) + cellSize);
+    //cells[0][1].setX(time*0.05);
+    //cells[0][1].setY(0);
+    var timeBase = Math.floor((xTime)/(wWidth/3));
+    var X = (xTime) - (wWidth/3)*timeBase;
+
+    if(prevTBase < timeBase)
+    {
+	graphPoints = [0,wHeight/3];
+	mpFlag^=1;		
+    }
+
+    graphPoints.push(X, ((wHeight/3)+5*frameRate));
+    if(xTime > wWidth/3)
+    {
+	//Need to do it twice because coordinates have 2 points
+	//graphPoints.shift();
+	//graphPoints.shift();
+    }
+    frameRateGraph.setPoints(graphPoints);
+    mPos.innerHTML = "timeBase " + mpFlag;
+
+    prevTBase = timeBase;
+
 }, animLayer);
 
 anim.start();
