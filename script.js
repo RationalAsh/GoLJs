@@ -1,5 +1,6 @@
 //Js file for the game of life web app.
 //Created by rationalAsh :D
+//Now live on github.io
 
 var cellSize = 20;
 
