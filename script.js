@@ -11,44 +11,26 @@ var mpFlag = 0;
 
 
 
-cont.onmousemove = function(e){
+//cont.onmousemove = function(e){
 
-    if((e.pageX > 1500) && (e.pageY < 410))
-    {
-	sBox.style.opacity = 0.8;
-	sBox.style.zIndex = 1;
-	sBox.style.visibility = "visible";
-    }
-    else
-    {
-	//sBox.style.opacity = 0.1;
-	sBox.style.zIndex  = -1;
-	sBox.style.visibility = "hidden";
-    }
+//if((e.pageX > 1500) && (e.pageY < 410))
+//    {
+//	sBox.style.opacity = 0.8;
+//	sBox.style.zIndex = 1;
+//	sBox.style.visibility = "visible";
+//    }
+//    else
+//    {
+//	//sBox.style.opacity = 0.1;
+//	sBox.style.zIndex  = -1;
+//	sBox.style.visibility = "hidden";
+//    }
+//
+//}
 
-}
-    
-
-sBox.onmousedown = function(){
-    mpFlag = 1;
-}
-sBox.onmouseup = function(){
-    mpFlag = 0;
-}
-
-sBox.onmouseover = function(e){
-    
-    //if(mpFlag==1)
-    //{
-	posDisp.innerHTML = 'Mouse pressed!'+ '(' + e.pageX + ',' + e.pageY+')';
-	
-    //}
-    //else
-    //{
-	//posDisp.innerHTML = 'Mouse released!'+ '(' + e.pageX + ',' + e.pageY+')';
-    //}
-}
-
+sBox.style.opacity = 0.8;
+sBox.style.zIndex = 1;
+sBox.style.visibility = "visible";
 
 var wHeight = screen.availHeight;
 var wWidth  = screen.availWidth;
@@ -67,7 +49,7 @@ var cells = new Array();
 var cTemp = new Array();
 
 cont.onclick = function(e){
-    //alert("Click at: "+ e.pageX + "," + e.pageY);
+    alert("Click at: "+ e.pageX + "," + e.pageY);
 }
 
 var stage = new Kinetic.Stage({
@@ -78,18 +60,6 @@ var stage = new Kinetic.Stage({
 
       var layer = new Kinetic.Layer();
 
-      var rect = new Kinetic.Rect({
-        x: 500,
-        y: 200,
-        width: 100,
-        height: 50,
-        fill: 'green',
-        stroke: 'black',
-        strokeWidth: 4
-      });
-
-      // add the shape to the layer
-      layer.add(rect);
 
       // add the layer to the stage
       stage.add(layer);
@@ -161,35 +131,42 @@ for(i=0; i<rows; i++)
     cells.push(cTemp);
 }
 
-for(i=0; i<rows; i++)
-{
-    for(j=0; j<cols; j++)
-    {
-	setTimeout(function(){
-	}, 1000); 
-	layer.add(cells[i][j]);
-	//layer.draw();
-    }
-}
+//for(i=0; i<rows; i++)
+//{
+//    for(j=0; j<cols; j++)
+//    {
+//	layer.add(cells[i][j]);
+//    }
+//}
 
-
-cells[0][0].remove()
+layer.add(cells[0][0]);
+layer.add(cells[0][1]);
+cells[0][0].remove();
 layer.draw();
 
+var anim = new Kinetic.Animation(function(frame){
+    var time = frame.time,
+        timeDIff = frame.timeDiff,
+        frameRate = frame.frameRate;
+    
+    //update stuff
+    mPos.innerHTML = "framerate: " + frameRate;
+}, layer);
 
+anim.start();
 
-var tween = new Kinetic.Tween(
-    {
-	node: rect,
-	duration: 0.3,
-	x: 500,
-	y: 200,
-	rotation: 0,
-	opacity: 0.9,
-	scaleX: 0,
-	scaleY: 0,
-	easing: Kinetic.Easings.StrongEaseOut,
-    }
-);
-
-tween.play();
+//var tween = new Kinetic.Tween(
+//    {
+//	node: rect,
+//	duration: 0.3,
+//	x: 500,
+//	y: 200,
+//	rotation: 0,
+//	opacity: 0.9,
+//	scaleX: 0,
+//	scaleY: 0,
+//	easing: Kinetic.Easings.StrongEaseOut,
+  //  }
+//);
+//
+//tween.play();
