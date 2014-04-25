@@ -58,11 +58,11 @@ var stage = new Kinetic.Stage({
         height: wHeight
       });
 
-      var layer = new Kinetic.Layer();
+var animLayer = new Kinetic.Layer();
+var statLayer = new Kinetic.Layer();
 
-
-      // add the layer to the stage
-      stage.add(layer);
+// add the layer to the stage
+stage.add(animLayer).add(statLayer);
 
 
 //Loop to make Y gridlines
@@ -99,13 +99,13 @@ for(j=0; j<cols; j++)
 //Adding Y lines to canvas
 for(i=0; i<rows; i++)
 {
-    layer.add(gridLinesY[i]);
+    statLayer.add(gridLinesY[i]);
 }
 
 //Adding X lines to canvas
 for(j=0; j<cols; j++)
 {
-    layer.add(gridLinesX[j]);
+    statLayer.add(gridLinesX[j]);
 }
 
 //Making the cells
@@ -139,10 +139,11 @@ for(i=0; i<rows; i++)
 //    }
 //}
 
-layer.add(cells[0][0]);
-layer.add(cells[0][1]);
+animLayer.add(cells[0][0]);
+animLayer.add(cells[0][1]);
 cells[0][0].remove();
-layer.draw();
+animLayer.draw();
+statLayer.draw();
 
 var anim = new Kinetic.Animation(function(frame){
     var time = frame.time,
@@ -151,7 +152,9 @@ var anim = new Kinetic.Animation(function(frame){
     
     //update stuff
     mPos.innerHTML = "framerate: " + frameRate;
-}, layer);
+
+    cells[0][1].setX(50*Math.sin(frame.time * 2  * Math.PI/2000) + cellSize);
+}, animLayer);
 
 anim.start();
 
